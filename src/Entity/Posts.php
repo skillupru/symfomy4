@@ -17,9 +17,39 @@ class Posts
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=254)
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $userId;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $image;
+
+    /**
+     * @ORM\Column(type="text")
      */
     private $content;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true, options={"default"=0})
+     */
+    private $likeCount;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true, options={"default"=0})
+     */
+    private $commentCount;
+
+    /**
+     * @ORM\Column(type="datetime", options={"default"="CURRENT_TIMESTAMP"})
+     */
+    private $createdAt;
+
+    /**
+     * @ORM\Column(type="datetime", options={"default"="CURRENT_TIMESTAMP"})
+     */
+    private $updatedAt;
 
     public function getId()
     {
