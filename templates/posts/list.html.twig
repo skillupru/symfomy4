@@ -3,5 +3,29 @@
 {% block title %}Список постов{% endblock %}
 
 {% block body %}
-    {{ dump(posts) }}
+    <style>
+        .posts .item {
+            margin: 15px;
+            background-color: #dedede;
+            padding: 20px;
+        }
+    </style>
+
+    <div class="search">
+        <form action="" method="post">
+            <input type="text" name="search" value="{{ app.request.get('search') }}">
+            <input type="submit" value="Поиск">
+        </form>
+    </div>
+
+    <div class="posts">
+        {% for post in posts %}
+        <div class="item">
+            {{ post.content | raw }}
+            <div class="image">
+                <img src="{{ post.image }}" width="606">
+            </div>
+        </div>
+        {% endfor %}
+    </div>
 {% endblock %}
