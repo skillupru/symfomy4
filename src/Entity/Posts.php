@@ -2,7 +2,10 @@
 
 namespace App\Entity;
 
+use App\Helpers\FileHelper;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\PostsRepository")
@@ -10,6 +13,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Posts
 {
+    const FILE_EXTENSION = ['jpg', 'png', 'jpeg', 'gif'];
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -23,6 +28,8 @@ class Posts
     private $userId;
 
     /**
+     * @Assert\NotBlank(message="Это поле не может быть пустым")
+     *
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $image;
@@ -52,6 +59,11 @@ class Posts
      */
     private $updatedAt;
 
+    /**
+     * @var UploadedFile
+     */
+    private $file;
+
 
     /**
      * @ORM\PrePersist()
@@ -64,6 +76,16 @@ class Posts
         if (!$this->getCreatedAt()) {
             $this->setCreatedAt(new \DateTime());
         }
+    }
+
+    /**
+     * @ORM\PrePersist()
+     */
+    public function uploadFile()
+    {
+        $file = $this->getFile();
+        $filename = $file->getClientOriginalName();
+        $file->move(FileHelper::UPLOAD_DIR, $filename);
     }
 
     public function getId()
@@ -184,5 +206,21 @@ class Posts
         $this->content = $content;
 
         return $this;
+    }
+
+    /**
+     * @return UploadedFile
+     */
+    public function getFile(): ?UploadedFile
+    {
+        return $this->file;
+    }
+
+    /**
+     * @param UploadedFile $file
+     */
+    public function setFile(UploadedFile $file): void
+    {
+        $this->file = $file;
     }
 }

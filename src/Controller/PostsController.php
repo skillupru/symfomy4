@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Posts;
 use App\Form\AddPostType;
+use App\Helpers\FileHelper;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -33,10 +35,21 @@ class PostsController extends Controller
         $form = $this->createForm(AddPostType::class, $post);
         $form->handleRequest($request);
 
+        if ($form->isSubmitted()) {
+            $filename = $post->getFile()->getClientOriginalName();
+            $extension = FileHelper::getExtension($filename);
+
+            // Валидация расширения файла
+            if (!in_array($extension, Posts::FILE_EXTENSION)) {
+                $form->get('file')->addError(new FormError("Расширение $extension не допустимо для загрузки"));
+            }
+        }
+
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($post);
             $em->flush();
+            $this->addFlash('success', 'Пост успешно добавлен');
         }
 
         return $this->render('posts/add.html.twig', [
