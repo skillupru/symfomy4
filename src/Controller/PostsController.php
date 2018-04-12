@@ -56,4 +56,14 @@ class PostsController extends Controller
             'form' => $form->createView(),
         ]);
     }
+
+    /**
+     * @Route("/posts/{post}", name="get_post", requirements={"post"="\d+"})
+     */
+    public function getPost(Posts $post = null)
+    {
+        return $this->render('posts/post.html.twig', [
+            'post' => $post,
+        ]);
+    }
 }

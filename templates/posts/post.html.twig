@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Детальная страница поста{% endblock %}
+
+{% block body %}
+<div class="container">
+
+    <div class="posts">
+        <div class="item">
+            {{ post.content | raw }}
+            <div class="image">
+                <img src="{{ post.image }}" width="606">
+            </div>
+        </div>
+        {% for comment in post.comments %}
+            <div class="item">
+                {{ comment.content | raw }}
+                <p>
+                    {{ comment.createdAt|date('d.m.Y H:i:s') }}
+                </p>
+            </div>
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}

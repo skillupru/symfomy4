@@ -12,7 +12,7 @@ class DefaultController extends Controller
      */
     public function index()
     {
-        return $this->render('add.html.twig', [
+        return $this->render('default/index.html.twig', [
             'test' => 123,
         ]);
     }

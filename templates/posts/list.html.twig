@@ -2,21 +2,15 @@
 
 {% block title %}Список постов{% endblock %}
 
-{% block body %}
-    <style>
-        .posts .item {
-            margin: 15px;
-            background-color: #dedede;
-            padding: 20px;
-        }
-    </style>
+{% block navbar %}
+    <form class="form-inline">
+        <input class="form-control mr-sm-2" name="search" placeholder="Поиск" value="{{ app.request.get('search') }}">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Поиск</button>
+    </form>
+{% endblock %}
 
-    <div class="search">
-        <form action="" method="post">
-            <input type="text" name="search" value="{{ app.request.get('search') }}">
-            <input type="submit" value="Поиск">
-        </form>
-    </div>
+{% block body %}
+<div class="container">
 
     <div class="posts">
         {% for post in posts %}
@@ -25,7 +19,9 @@
             <div class="image">
                 <img src="{{ post.image }}" width="606">
             </div>
+            <a href="{{ path('get_post', {post: post.id}) }}" class="btn">Подробнее</a>
         </div>
         {% endfor %}
     </div>
+</div>
 {% endblock %}
