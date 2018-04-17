@@ -21,6 +21,13 @@ class PostsController extends Controller
         $em = $this->getDoctrine()->getManager();
         $posts = $em->getRepository('App:Posts')->getFeed($search);
 
+        $num = 1;
+        foreach ($posts as $post) {
+            $content = preg_replace('/[0-9]/', '', $post->getContent());
+            $post->setContent($num . ') ' . $content);
+            $num++;
+        }
+
         return $this->render('posts/list.html.twig', [
             'posts' => $posts,
         ]);
